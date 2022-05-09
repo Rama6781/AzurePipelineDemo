@@ -12,6 +12,19 @@ pool:
 variables:
   buildConfiguration: 'Release'
 
-steps:
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
+stages:
+- stage: 'Build'
+  jobs:
+  - job:
+    steps:
+    - task: Npm@1
+      inputs:
+        command: 'install'
+        workingDir: 'Clientapp'
+    - task: Npm@1
+      inputs:
+        command: 'ci'
+        workingDir: 'Clientapp'
+    
+    - script: dotnet build --configuration $(buildConfiguration)
+      displayName: 'dotnet build $(buildConfiguration)'
